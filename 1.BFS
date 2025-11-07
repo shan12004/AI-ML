@@ -1,0 +1,58 @@
+# Simple BFS (Breadth-First Search) Implementation
+
+def bfs(graph, start):
+    """
+    BFS explores the graph level by level
+    like ripples spreading in water
+    """
+    visited = [start]       # Keep track of visited nodes
+    queue = [start]         # Queue: first in, first out
+
+    while queue:
+        # Take the first node from queue
+        node = queue.pop(0)
+
+        # If we haven't visited this node yet
+        if node not in visited:
+            visited.append(node)    # Mark as visited
+
+        # Add all neighbors to the queue
+        for neighbor in graph[node]:
+            if neighbor not in visited and neighbor not in queue:
+                queue.append(neighbor)
+
+    return visited
+
+# Example graph:
+# A
+# / \
+# B   C
+# / \ / \
+# D E F
+
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': ['F'],
+    'F': []
+}
+
+# Run BFS starting from node 'A'
+result = bfs(graph, 'A')
+
+print("Graph connections:")
+for node, neighbors in graph.items():
+    print(f"{node} -> {neighbors}")
+
+print(f"\nBFS starting from 'A': {result}")
+print("Instance step by step")
+print("1. Start at 'A'")
+print("2. Visit A, add its neighbors (B, C) to queue")
+print("3. Visit B, add its neighbors (D, E) to queue")
+print("4. Visit C, add its neighbor (F) to queue")
+print("5. Visit D (no neighbors to add)")
+print("6. Visit E, add its neighbor (F). (F is already in the queue, but the 'neighbor not in queue' check prevents adding it again - a useful optimization)")
+print("7. Visit F (no neighbors to add)")
+# The implementation in the image doesn't show step 6 and 7, but they complete the process.
