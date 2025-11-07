@@ -1,0 +1,58 @@
+Self Organizing Maps
+
+
+A Self Organizing Map (SOM) or Kohonen Map is an unsupervised neural network algorithm based on biological neural models from the 1970s. It uses a competitive learning approach and is primarily designed for clustering and dimensionality reduction. SOM effectively maps high-dimensional data to a lower-dimensional grid enabling easier interpretation and visualization of complex datasets.
+
+1. Importing Required Libraries
+
+import math
+
+2. Defining the SOM Class
+
+class SOM:
+    def winner(self, weights, sample):
+        D0 = 0
+        D1 = 0
+
+        for i in range(len(sample)):
+            D0 += math.pow((sample[i] - weights[0][i]), 2)
+            D1 += math.pow((sample[i] - weights[1][i]), 2)
+            
+        return 0 if D0 < D1 else 1
+        
+    def update(self, weights, sample, J, alpha)
+        for i in range(len(weights[0])):
+            weights[J][i] = weights[J][i] + alpha * (sample[i] - weights[J][i])
+
+        return weights
+3. Defining the Main Function
+
+def main():
+    T = [[1, 1, 0, 0], [0, 0, 0, 1], [1, 0, 0, 0], [0, 0, 1, 1]]
+    m, n = len(T), len(T[0])
+    weights = [[0.2, 0.6, 0.5, 0.9], [0.8, 0.4, 0.7, 0.3]]
+    ob = SOM()
+    epochs = 3
+    alpha = 0.5
+4. Training the SOM Network
+
+# Inside the "main" function
+    for i in range(epochs):
+        for j in range(m):
+            sample = T[j]
+            J = ob.winner(weights, sample)
+            weights = ob.update(weights, sample, J, alpha)
+
+5. Classifying Test Sample
+
+# Inside the "Main" function
+    s = [0, 0, 0, 1]
+    J = ob.winner(weights, s)
+
+    print("Test Sample s belongs to Cluster: ", J)
+    print("Trained weights: ", weights)
+
+6. Running the Main Function
+
+if __name__ == "__main__":
+    main()
