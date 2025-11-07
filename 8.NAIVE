@@ -1,0 +1,51 @@
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score, confusion_matrix
+
+# Step 1: Prepare the dataset
+# Create a sample dataset for demonstration
+data = {
+    'age': [25, 30, 45, 50, 20, 55, 35, 60, 40, 28],
+    'income': [50000, 60000, 100000, 110000, 35000, 120000, 75000, 130000, 90000, 55000],
+    'risk': ['low', 'low', 'high', 'high', 'low', 'high', 'low', 'high', 'high', 'low']
+}
+df = pd.DataFrame(data)
+
+# Separate features (X) and target (y)
+X = df[['age', 'income']]
+y = df['risk']
+
+# Step 2: Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Step 3: Create and train the classifier
+# Create a Gaussian Naive Bayes model
+gnb = GaussianNB()
+
+# Train the model using the training data
+gnb.fit(X_train, y_train)
+
+# Step 4: Make predictions
+# Predict the class for the test data
+y_pred = gnb.predict(X_test)
+
+# Predict the probability of each class for a new data point
+new_data_point = np.array([[38, 85000]])
+probabilities = gnb.predict_proba(new_data_point)
+predicted_class = gnb.predict(new_data_point)
+
+# Step 5: Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+conf_matrix = confusion_matrix(y_test, y_pred)
+
+print(f"Test data predictions: {y_pred}")
+print(f"Accuracy of the classifier: {accuracy:.2f}\n")
+print("Confusion Matrix:")
+print(conf_matrix)
+
+print("\n--- Predicting for a new data point ---")
+print(f"New data point (age=38, income=85000): {new_data_point}")
+print(f"Predicted class: {predicted_class[0]}")
+print(f"Predicted probabilities (low, high): {probabilities[0]}")
