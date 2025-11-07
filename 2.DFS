@@ -1,0 +1,61 @@
+# Simple DFS (Depth-First Search) Implementation
+
+def dfs(graph, start):
+    """
+    DFS explores the graph as deep as possible first
+    like exploring a maze by going as far as you can
+    """
+    visited = []            # Keep track of visited nodes
+    stack = [start]         # Stack: last in, first out
+
+    while stack:
+        # Take the last node from stack
+        node = stack.pop()
+
+        # If we haven't visited this node yet
+        if node not in visited:
+            visited.append(node)    # Mark as visited
+
+        # Add all neighbors to the stack (in reverse order)
+        # Note: Iterating on graph[node] is done in reverse in a typical DFS implementation
+        # to ensure that the lexicographically *first* neighbor is processed first (LIFO order).
+        # This specific code iterates normally, meaning the *last* neighbor added to the list will be popped and visited next.
+        for neighbor in reversed(graph[node]):
+            if neighbor not in visited:
+                stack.append(neighbor)
+
+    return visited
+
+# Example graph:
+# A
+# / \
+# B   C
+# / \
+# D E
+
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': ['F'],
+    'F': []
+}
+
+# Run DFS starting from node 'A'
+result = dfs(graph, 'A')
+
+print("Graph connections:")
+for node, neighbors in graph.items():
+    print(f"{node} -> {neighbors}")
+
+print(f"\nDFS starting from 'A': {result}")
+print("\nStep by step")
+print("1. Start at 'A'")
+print("2. Visit A, add its neighbors (C, B) to stack") # Note: C is pushed first, B second, so B is visited next (LIFO)
+print("3. Visit B (last added), add its neighbors (E, D) to stack") # E is pushed first, D second, so D is visited next
+print("4. Visit D (last added), no neighbors to add")
+print("5. Visit E, add F to stack")
+# The image stops at step 5, the full process continues:
+# print("6. Visit F, no neighbors to add")
+# print("7. Visit C (popped after F), add F to stack (but F is already visited, so it's skipped)")
