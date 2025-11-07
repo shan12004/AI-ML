@@ -1,0 +1,78 @@
+from collections import deque
+
+# --- Graph Representation ---
+# We'll use an adjacency list to represent the graph.
+# Keys are vertices, values are lists of their neighbors.
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D', 'E'],
+    'C': ['A', 'F'],
+    'D': ['B'],
+    'E': ['B', 'F'],
+    'F': ['C', 'E']
+}
+
+# --- Breadth-First Search (BFS) ---
+def bfs(graph, start_node):
+    visited = set()  # To keep track of visited nodes
+    queue = deque([start_node])  # Initialize queue with the start node
+    visited.add(start_node)
+    path = []
+
+    while queue:
+        current_node = queue.popleft()  # Dequeue the first node
+        path.append(current_node)
+
+        for neighbor in graph[current_node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)  # Enqueue unvisited neighbors
+    return path
+
+# --- Depth-First Search (DFS) ---
+def dfs_iterative(graph, start_node):
+    visited = set()
+    stack = [start_node]  # Initialize stack with the start node
+    visited.add(start_node)
+    path = []
+
+    while stack:
+        current_node = stack.pop()  # Pop the top node
+        path.append(current_node)
+
+        # Add unvisited neighbors to the stack in reverse order
+        # to ensure correct exploration order for iterative DFS
+        for neighbor in reversed(graph[current_node]):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                stack.append(neighbor)
+    return path
+
+def dfs_recursive(graph, current_node, visited, path):
+    visited.add(current_node)
+    path.append(current_node)
+
+    for neighbor in graph[current_node]:
+        if neighbor not in visited:
+            dfs_recursive(graph, neighbor, visited, path)
+    return path
+
+# --- Analysis ---
+print("BFS Traversal:", bfs(graph, 'A'))
+print("DFS Traversal (Iterative):", dfs_iterative(graph, 'A'))
+print("DFS Traversal (Recursive):", dfs_recursive(graph, 'A', set(), []))
+
+# --- Complexity Explanation ---
+print("\n--- Time and Space Complexity Analysis ---")
+
+print("\nBreadth-First Search (BFS):")
+print("Time Complexity: O(V + E)")
+print("  - Each vertex (V) and edge (E) is visited at most once.")
+print("Space Complexity: O(V)")
+print("  - In the worst case, the queue can hold all vertices in a wide graph.")
+
+print("\nDepth-First Search (DFS):")
+print("Time Complexity: O(V + E)")
+print("  - Each vertex (V) and edge (E) is visited at most once.")
+print("Space Complexity: O(V)")
+print("  - In the worst case, the recursion stack (for recursive DFS) or explicit stack (for iterative DFS) can hold all vertices in a deep graph.")
